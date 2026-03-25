@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>客诉信息查询中心</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* 顶部标题 */
+    .header {
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      font-size: 15px;
+      color: #999;
+    }
+
+    /* 主卡片容器 */
+    .main-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    }
+
+    /* 卡片标题 */
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .card-icon.orange {
+      background: #ff9500;
+    }
+
+    .card-icon.green {
+      background: #34c759;
+    }
+
+    .card-title-text h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+    }
+
+    .card-title-text p {
+      font-size: 13px;
+      color: #999;
+    }
+
+    /* 分类标题 */
+    .category-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #666;
+      margin-top: 24px;
+      margin-bottom: 16px;
+    }
+
+    .category-title:first-child {
+      margin-top: 0;
+    }
+
+    .category-icon {
+      font-size: 18px;
+    }
+
+    /* 查询工具网格 */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .tool-item {
+      background: #fafafa;
+      border: 1px solid #e8e8e8;
+      border-radius: 10px;
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tool-item:hover {
+      background: #f0f0f0;
+      border-color: #d0d0d0;
+      transform: translateY(-2px);
+    }
+
+    .tool-item-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .tool-item-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    /* 疑难判定三卡片 */
+    .dispute-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .dispute-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      border: 2px solid #e8e8e8;
+      transition: all .2s;
+    }
+
+    .dispute-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    }
+
+    .dispute-card.cyan {
+      border-color: #5ac8fa;
+      background: linear-gradient(135deg, #f0faff 0%, #fff 100%);
+    }
+
+    .dispute-card.orange {
+      border-color: #ff9500;
+      background: linear-gradient(135deg, #fff8f0 0%, #fff 100%);
+    }
+
+    .dispute-card.purple {
+      border-color: #af52de;
+      background: linear-gradient(135deg, #f9f0ff 0%, #fff 100%);
+    }
+
+    .dispute-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+
+    .dispute-card.cyan .dispute-card-icon {
+      background: #5ac8fa;
+      color: #fff;
+    }
+
+    .dispute-card.orange .dispute-card-icon {
+      background: #ff9500;
+      color: #fff;
+    }
+
+    .dispute-card.purple .dispute-card-icon {
+      background: #af52de;
+      color: #fff;
+    }
+
+    .dispute-card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 12px;
+    }
+
+    .dispute-card p {
+      font-size: 13px;
+      color: #999;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .dispute-card-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #007aff;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .dispute-card-action:hover {
+      text-decoration: underline;
+    }
+
+    .dispute-card.cyan .dispute-card-action {
+      color: #5ac8fa;
+    }
+
+    .dispute-card.orange .dispute-card-action {
+      color: #ff9500;
+    }
+
+    .dispute-card.purple .dispute-card-action {
+      color: #af52de;
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .dispute-cards {
+        grid-template-columns: 1fr;
+      }
+
+      body {
+        padding: 20px 16px;
+      }
+
+      .main-card {
+        padding: 24px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 顶部标题 -->
+    <div class="header">
+      <h1>客诉信息查询中心</h1>
+      <p>电商治理一线工具</p>
+    </div>
+
+    <!-- 第一个模块：客诉信息查询 -->
+    <div class="main-card">
+      <div class="card-header">
+        <div class="card-icon orange">🔍</div>
+        <div class="card-title-text">
+          <h2>客诉信息查询</h2>
+          <p>点击卡片跳转至对应的查询网站</p>
+        </div>
+      </div>
+
+      <!-- 身份信息 -->
+      <div class="category-title">
+        <span class="category-icon">🧑</span>
+        <span>身份信息</span>
+      </div>
+      <div class="tools-grid">
+        <div class="tool-item" onclick="openUrl('https://shangbiao.tianyancha.com/search/21872756')">
+          <span class="tool-item-icon">🏢</span>
+          <span class="tool-item-text">公司营业执照查询</span>
+        </div>
+        <div class="tool-item" onclick="openUrl('https://www.tianyancha.com/login?from=https%3A%2F%2Fshangbiao.tianyancha.com%2Fsearch%2F21872756')">
+          <span class="tool-item-icon">🕸️</span>
+          <span class="tool-item-text">法人和公司关系验真</span>
+        </div>
+      </div>
+
+      <!-- 权利信息 -->
+      <div class="category-title">
+        <span class="category-icon">💳</span>
+        <span>权利信息</span>
+      </div>
+      <div class="tools-grid">
+        <div class="tool-item" onclick="openUrl('https://pss-system.cponline.cnipa.gov.cn/conventionalSearch')">
+          <span class="tool-item-icon">💡</span>
+          <span class="tool-item-text">专利查询（官方）</span>
+        </div>
+        <div class="tool-item" onclick="openUrl('http://www.innojoy.com/search/home.html')">
+          <span class="tool-item-icon">🔬</span>
+          <span class="tool-item-text">专利查询（第三方）</span>
+        </div>
+        <div class="tool-item" onclick="openUrl('https://sbj.cnipa.gov.cn/sbj/sbcx/')">
+          <span class="tool-item-icon">🔏</span>
+          <span class="tool-item-text">商标查询（官方）</span>
+        </div>
+        <div class="tool-item" onclick="openUrl('https://www.quandashi.com/')">
+          <span class="tool-item-icon">™️</span>
+          <span class="tool-item-text">商标查询（第三方）</span>
+        </div>
+        <div class="tool-item" onclick="openUrl('http://qgzpdj.ccopyright.com.cn/registrationPublicity.html')">
+          <span class="tool-item-icon">©️</span>
+          <span class="tool-item-text">著作权查询</span>
+        </div>
+      </div>
+
+      <!-- 其他信息 -->
+      <div class="category-title">
+        <span class="category-icon">📦</span>
+        <span>其他信息</span>
+      </div>
+      <div class="tools-grid">
+        <div class="tool-item" onclick="openUrl('https://inv-veri.chinatax.gov.cn/?lailu=www.0dh.cn')">
+          <span class="tool-item-icon">🧾</span>
+          <span class="tool-item-text">发票验真</span>
+        </div>
+        <div class="tool-item" onclick="openUrl('https://lego.corp.kuaishou.com/home/?query=2304983845&searchType=order')">
+          <span class="tool-item-icon">📦</span>
+          <span class="tool-item-text">订单编号查询</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第二个模块：疑难案件判定查询 -->
+    <div class="main-card">
+      <div class="card-header">
+        <div class="card-icon green">📋</div>
+        <div class="card-title-text">
+          <h2>疑难案件判定查询</h2>
+          <p>点击卡片跳转至对应数据源列表</p>
+        </div>
+      </div>
+
+      <div class="dispute-cards">
+        <!-- 专利案件 -->
+        <div class="dispute-card cyan">
+          <div class="dispute-card-icon">💡</div>
+          <h3>专利案件</h3>
+          <p>Q列搜索专利号 → Y-AE列结果</p>
+          <a class="dispute-card-action" href="https://docs.corp.kuaishou.com/s/home/fcACjdJGhjb_n0xCcAIpiCUAF" target="_blank">
+            🔗 打开查询
+          </a>
+        </div>
+
+        <!-- 商标案件 -->
+        <div class="dispute-card orange">
+          <div class="dispute-card-icon">™️</div>
+          <h3>商标案件</h3>
+          <p>K列搜索商标号 → E列结果</p>
+          <a class="dispute-card-action" href="https://docs.corp.kuaishou.com/s/home/fcAAL0Kl-0yZKyYiPofXsoRBk" target="_blank">
+            🔗 打开查询
+          </a>
+        </div>
+
+        <!-- 著作权案件 -->
+        <div class="dispute-card purple">
+          <div class="dispute-card-icon">©️</div>
+          <h3>著作权案件</h3>
+          <p>K列搜索登记号 → E列结果</p>
+          <a class="dispute-card-action" href="https://docs.corp.kuaishou.com/s/home/fcACzhyFdJQ0hYbPyKSoXUxna" target="_blank">
+            🔗 打开查询
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openUrl(url) {
+      window.open(url, '_blank');
+    }
+  </script>
+</body>
+</html>
